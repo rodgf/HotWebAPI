@@ -1,0 +1,56 @@
+@page
+@using Database;
+@model IndexModel
+@{
+  ViewData["Title"] = "Home page";
+  List<Note> notas = (List<Note>)ViewData["notas"];
+  List<Aluno> alunos = (List<Aluno>)ViewData["alunos"];
+  List<Aluno> enturmados = (List<Aluno>)ViewData["enturmados"];
+}
+
+<div class="text-center">
+  <h1 class="display-4">Welcome</h1>
+  <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div style="padding: 20px;">
+  <h2>Notas</h2>
+</div>
+<div style="padding: 20px;">
+  <ul>
+    @foreach (Note nota in notas) {
+      <li>@Html.Raw(nota.UserId + ": " + nota.Body)</li>
+    }
+  </ul>
+</div>
+
+<div style="padding: 20px;">
+  <h2>Alunos</h2>
+</div>
+<div style="padding: 20px;">
+  <ul>
+    @foreach (Aluno aluno in alunos) {
+      <li>@Html.Raw(aluno.nome + " - " + aluno.turma)</li>
+    }
+  </ul>
+</div>
+
+<div style="padding: 20px;">
+  <h2>Enturmados</h2>
+</div>
+<div style="padding: 20px;">
+  <ul>
+    @foreach (Aluno enturmado in enturmados) {
+      <li>@Html.Raw(enturmado.nome + " - " + enturmado.turma)</li>
+    }
+  </ul>
+</div>
+
+<div style="padding: 20px;">
+  <h2>Resultado</h2>
+</div>
+<div style="padding: 20px; background-color: #E0E8EF; color: darkslategray; font-size: 13px; border-style: outset; border-width: 3px; ">
+  <p>
+    @Html.Raw(ViewData["resultado"])
+  </p>
+</div>
