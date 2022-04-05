@@ -1,3 +1,4 @@
+using GraphiQl;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +17,8 @@ namespace MongoDBClient {
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services) {
-      services.AddRazorPages();
+      services.AddMvc();
+      services.AddControllers(options => options.EnableEndpointRouting = false);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -27,14 +29,16 @@ namespace MongoDBClient {
         app.UseExceptionHandler("/Error");
       }
 
+      app.UseStatusCodePages();
       app.UseStaticFiles();
-
       app.UseRouting();
 
-      app.UseAuthorization();
+      app.UseGraphiQl("/graphql");
 
-      app.UseEndpoints(endpoints => {
-        endpoints.MapRazorPages();
+      app.UseMvc(routes => {
+        routes.MapRoute(
+            name: "default",
+            template: "{controller=Graphql}/{action=Index}/{id?}");
       });
     }
   }

@@ -30,6 +30,19 @@ namespace MongoDBClient.Database {
     }
 
     //
+    public void NovaNota(Note nota) {
+      IMongoCollection<Note> cNote = _dbAlt.GetCollection<Note>("Note");
+      cNote.InsertOne(nota);
+    }
+
+    //
+    public Note ObtemNota(int userId) {
+      IMongoCollection<Note> cNote = _dbAlt.GetCollection<Note>("Note");
+      Note nota = cNote.Find(_ => _.UserId == userId).FirstOrDefault();
+      return nota;
+    }
+
+    //
     public List<Aluno> ObtemAlunos(string turma = null) {
       IMongoCollection<Aluno> cAluno = _db.GetCollection<Aluno>("aluno");
       List<Aluno> alunos = cAluno.Find(_ => turma == null || _.turma == turma).ToList();
