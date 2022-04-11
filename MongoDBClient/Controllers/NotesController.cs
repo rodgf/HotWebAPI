@@ -8,7 +8,11 @@ namespace MongoDBClient.Controllers {
   [Route("[controller]")]
   [ApiController]
   public class NotesController : ControllerBase {
-    readonly DBHpr _hpr = new DBHpr();
+    private readonly DBHpr _hpr;
+
+    public NotesController(DBHpr hpr) {
+      _hpr = hpr;
+    }
 
     //
     public IEnumerable<Note> Get() {

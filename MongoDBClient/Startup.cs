@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MongoDBClient.Database;
 
 namespace MongoDBClient {
 
@@ -17,6 +18,10 @@ namespace MongoDBClient {
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services) {
       services.AddRazorPages();
+      services.AddMvc();
+      services.AddControllers(options => options.EnableEndpointRouting = false);
+
+      services.AddScoped<DBHpr>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -31,10 +36,10 @@ namespace MongoDBClient {
 
       app.UseRouting();
 
-      app.UseAuthorization();
-
-      app.UseEndpoints(endpoints => {
-        endpoints.MapRazorPages();
+      app.UseMvc(routes => {
+        routes.MapRoute(
+            name: "default",
+            template: "{controller=Graphql}/{action=Index}/{id?}");
       });
     }
   }
