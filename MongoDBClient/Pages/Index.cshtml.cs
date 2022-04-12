@@ -10,25 +10,25 @@ namespace MongoDBClient.Pages {
   //
   public class IndexModel : PageModel {
     private readonly ILogger<IndexModel> _logger;
+    private readonly DBHpr _hpr;
 
-    public IndexModel(ILogger<IndexModel> logger) {
+    public IndexModel(ILogger<IndexModel> logger, DBHpr hpr) {
       _logger = logger;
+      _hpr = hpr;
     }
 
     //
     public void OnGet() {
-      DBHpr hpr = new DBHpr();
-
-      List<Note> notas = hpr.ObtemNotas();
+      List<Note> notas = _hpr.ObtemNotas();
       ViewData["notas"] = notas;
 
-      List<Aluno> alunos = hpr.ObtemAlunos();
+      List<Aluno> alunos = _hpr.ObtemAlunos();
       ViewData["alunos"] = alunos;
 
-      List<Aluno> enturmados = hpr.ObtemAlunos("Enturmada");
+      List<Aluno> enturmados = _hpr.ObtemAlunos("Enturmada");
       ViewData["enturmados"] = enturmados;
 
-      ViewData["resultado"] = JValue.Parse(ObtemJson(hpr))
+      ViewData["resultado"] = JValue.Parse(ObtemJson(_hpr))
         .ToString(Formatting.Indented)
         .Replace("\n", "<br>")
         .Replace("\t", "&nbsp;&nbsp;")
