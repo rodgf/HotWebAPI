@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MongoDBClient.Database;
+using MongoDBClient.GraphQL;
 
 namespace MongoDBClient {
 
@@ -21,7 +22,17 @@ namespace MongoDBClient {
       services.AddMvc();
       services.AddControllers(options => options.EnableEndpointRouting = false);
 
-      services.AddScoped<DBHpr>();
+      services.AddTransient<DBHpr>();
+
+      // GraphQL
+      services
+          .AddGraphQLServer()
+          .AddQueryType(d => d.Name("Query"))
+              .AddTypeExtension<NoteQuery>()
+              .AddTypeExtension<AlunoQuery>()
+          .AddType<NoteType>()
+          .AddType<AlunoType>()
+          .AddType<AlunoResolver>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,13 +44,18 @@ namespace MongoDBClient {
       }
 
       app.UseStaticFiles();
-
       app.UseRouting();
+      app.UseStatusCodePages();
+
+      app.UseEndpoints(endpoints => {
+        endpoints.MapControllers();
+        endpoints.MapGraphQL("/api/graphql");
+      });
 
       app.UseMvc(routes => {
         routes.MapRoute(
             name: "default",
-            template: "{controller=Graphql}/{action=Index}/{id?}");
+            template: "{controller}/{action=Index}/{id?}");
       });
     }
   }

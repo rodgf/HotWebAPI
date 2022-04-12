@@ -30,6 +30,13 @@ namespace MongoDBClient.Database {
     }
 
     //
+    public Aluno ObtemAluno(int userId = 0) {
+      IMongoCollection<Aluno> cAluno = _db.GetCollection<Aluno>("aluno");
+      Aluno aluno = cAluno.Find(_ => userId == 0 || _.matricula == userId).FirstOrDefault();
+      return aluno;
+    }
+
+    //
     public List<Aluno> ObtemAlunos(string turma = null) {
       IMongoCollection<Aluno> cAluno = _db.GetCollection<Aluno>("aluno");
       List<Aluno> alunos = cAluno.Find(_ => turma == null || _.turma == turma).ToList();
