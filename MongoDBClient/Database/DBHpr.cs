@@ -1,9 +1,8 @@
-using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace MongoDBClient.Database {
 
@@ -23,13 +22,6 @@ namespace MongoDBClient.Database {
     }
 
     //
-    public List<Note> ObtemNotas(int userId = 0) {
-      IMongoCollection<Note> cNote = _dbAlt.GetCollection<Note>("Note");
-      List<Note> notas = cNote.Find(_ => userId == 0 || _.UserId == userId).ToList();
-      return notas;
-    }
-
-    //
     public void NovaNota(Note nota) {
       IMongoCollection<Note> cNote = _dbAlt.GetCollection<Note>("Note");
       cNote.InsertOne(nota);
@@ -40,6 +32,13 @@ namespace MongoDBClient.Database {
       IMongoCollection<Note> cNote = _dbAlt.GetCollection<Note>("Note");
       Note nota = cNote.Find(_ => _.UserId == userId).FirstOrDefault();
       return nota;
+    }
+
+    //
+    public List<Note> ObtemNotas(int userId = 0) {
+      IMongoCollection<Note> cNote = _dbAlt.GetCollection<Note>("Note");
+      List<Note> notas = cNote.Find(_ => userId == 0 || _.UserId == userId).ToList();
+      return notas;
     }
 
     //
@@ -57,7 +56,7 @@ namespace MongoDBClient.Database {
     }
 
     //
-    public List<object> ObtemAlunosExt(string[] query) {
+    public List<Project> ObtemAlunosExt(string[] query) {
       IMongoCollection<Aluno> cAluno = _db.GetCollection<Aluno>("aluno");
 
       BsonDocument[] pipeline = new BsonDocument[query.Length];
@@ -65,9 +64,55 @@ namespace MongoDBClient.Database {
         pipeline[i] = BsonSerializer.Deserialize<BsonDocument>(query[i]);
       }
 
-      IAsyncCursor<object> temp = cAluno.Aggregate<object>(pipeline);
-      List<object> result = temp.ToList();
+      IAsyncCursor<Project> temp = cAluno.Aggregate<Project>(pipeline);
+      List<Project> result = temp.ToList();
       return result;
+    }
+
+    //
+    public List<Project> ObtemProjetos() {
+      string[] query = {
+                @"{
+	""$project"": {
+		""tipo"": {
+			""$switch"": {
+				""branches"": [{
+						""case"": { ""$ne"": [ ""$nome"", ""Fonseca"" ] }, 
+						""then"": ""Normal"" 
+					}],
+				""default"": ""$nome""
+			}
+		},
+		""enturmada"": {
+			""$switch"": {
+				""branches"": [{
+						""case"": { ""$ne"": [ ""$turma"", ""Enturmada"" ] }, 
+						""then"": ""Desenturmado"" 
+					}],
+				""default"": ""$turma""
+			}
+		},
+		""matricula"": ""$matricula"",
+		""nome"": ""$nome"",
+		""turma"": ""$turma""
+	}
+}", @"{
+	$lookup: {
+		from: ""turma"",
+		localField: ""turma"",
+		foreignField: ""nome"",
+		as: ""refturma""
+	}
+}", @"{
+		$lookup: {
+			from: ""derivado"",
+			localField: ""matricula"",
+			foreignField: ""matricula"",
+			as: ""derivacao""
+		}
+}" };
+
+      return ObtemAlunosExt(query);
     }
   }
 }

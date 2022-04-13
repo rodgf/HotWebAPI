@@ -37,48 +37,7 @@ namespace MongoDBClient.Pages {
 
     //
     private static string ObtemJson(DBHpr hpr) {
-      string[] query = {
-                @"{
-	""$project"": {
-		""tipo"": {
-			""$switch"": {
-				""branches"": [{
-						""case"": { ""$ne"": [ ""$nome"", ""Fonseca"" ] }, 
-						""then"": ""Normal"" 
-					}],
-				""default"": ""$nome""
-			}
-		},
-		""enturmada"": {
-			""$switch"": {
-				""branches"": [{
-						""case"": { ""$ne"": [ ""$turma"", ""Enturmada"" ] }, 
-						""then"": ""Desenturmado"" 
-					}],
-				""default"": ""$turma""
-			}
-		},
-		""matricula"": ""$matricula"",
-		""nome"": ""$nome"",
-		""turma"": ""$turma""
-	}
-}", @"{
-	$lookup: {
-		from: ""turma"",
-		localField: ""turma"",
-		foreignField: ""nome"",
-		as: ""refturma""
-	}
-}", @"{
-		$lookup: {
-			from: ""derivado"",
-			localField: ""matricula"",
-			foreignField: ""matricula"",
-			as: ""derivacao""
-		}
-}" };
-
-      List<object> objects = hpr.ObtemAlunosExt(query);
+      List<Project> objects = hpr.ObtemProjetos();
       string result = System.Text.Json.JsonSerializer.Serialize(objects);
       return result;
     }

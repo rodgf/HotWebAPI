@@ -32,6 +32,7 @@ namespace MongoDBClient {
               .AddTypeExtension<AlunoQuery>()
           .AddType<NoteType>()
           .AddType<AlunoType>()
+          .AddType<ProjectResolver>()
           .AddType<AlunoResolver>();
     }
 

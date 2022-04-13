@@ -1,0 +1,22 @@
+query {
+  notes {
+    body,
+    updatedOn,
+    createdOn,
+    project {
+      tipo,
+      enturmada,
+      matricula,
+      nome,
+      turma,
+      refturma {
+        nome,
+        local
+      },
+      derivacao {
+        matricula,
+        descricao
+      }
+    }
+  }    
+}

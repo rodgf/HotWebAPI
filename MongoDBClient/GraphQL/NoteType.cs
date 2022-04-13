@@ -7,7 +7,8 @@ namespace MongoDBClient.GraphQL {
       descriptor.Field(_ => _.Body);
       descriptor.Field(_ => _.UpdatedOn);
       descriptor.Field(_ => _.CreatedOn);
-      descriptor.Field<AlunoResolver>(_ => _.GetAluno(default, default));
+      //descriptor.Field<AlunoResolver>(_ => _.GetAluno(default, default));
+      descriptor.Field<ProjectResolver>(_ => _.GetProject(default, default));
     }
   }
 }
