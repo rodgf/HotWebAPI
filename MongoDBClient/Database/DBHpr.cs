@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bson;
@@ -7,7 +8,7 @@ using MongoDB.Driver;
 namespace MongoDBClient.Database {
 
   //
-  public class DBHpr {
+  public class DBHpr : IDisposable {
     private readonly MongoClient _client;
     private readonly MongoClient _clientAlt;
     private readonly IMongoDatabase _db;
@@ -113,6 +114,10 @@ namespace MongoDBClient.Database {
 }" };
 
       return ObtemAlunosExt(query);
+    }
+
+    void IDisposable.Dispose() {
+      
     }
   }
 }
