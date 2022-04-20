@@ -32,6 +32,9 @@ namespace MongoDBClient.Controllers {
               matricula,
               descricao
             }
+          },
+          dummies {
+            name
           }
         }
       }";

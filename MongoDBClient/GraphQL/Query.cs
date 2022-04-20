@@ -23,8 +23,9 @@ namespace MongoDBClient.GraphQL {
             Body = note.Body,
             UpdatedOn = note.UpdatedOn,
             CreatedOn = note.CreatedOn,
-            project = project
-          });
+            project = project,
+            dummies = DBDummy.ObtemDummies()
+          }); ;
         }
       }
 
@@ -40,12 +41,20 @@ namespace MongoDBClient.GraphQL {
             .FirstOrDefault();
       }
     }
+
+    //
+    [GraphQLMetadata("dummies")]
+    public List<Dummy> GetDummies() {
+      return DBDummy.ObtemDummies();
+    }
   }
 
+  //
   public class NoteProject {
     public string Body { get; set; }
     public DateTime UpdatedOn { get; set; }
     public DateTime CreatedOn { get; set; }
     public Project project { get; set; }
+    public List<Dummy> dummies { get; set; }
   }
 }

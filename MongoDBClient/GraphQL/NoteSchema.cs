@@ -20,7 +20,8 @@ namespace MongoDBClient.GraphQL {
               updatedOn: Date,
               createdOn: Date,
               userId: Int,
-              project: Project
+              project: Project,
+              dummies: [Dummy]
             }
 
             type Project {
@@ -43,9 +44,15 @@ namespace MongoDBClient.GraphQL {
               descricao: String
             }
 
+            type Dummy {
+              id: Int,
+              name: String
+            }
+
             type Query {
               notes: [Note],
-              project(userId: Int): Project
+              project(userId: Int): Project,
+              dummies: [Dummy]
             }
         ", _ => {
         _.Types.Include<Query>();
