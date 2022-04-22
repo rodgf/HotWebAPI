@@ -10,7 +10,7 @@ namespace MongoDBClient.GraphQL {
   public class NoteQuery {
 
     //
-    public IEnumerable<Note> GetNotes([Service] DBHpr hpr) =>
-        hpr.ObtemNotas();
+    public IEnumerable<Note> GetNotes([Service] DBHpr hpr, int userId = 0) =>
+        hpr.ObtemNotas(userId);
   }
 }
