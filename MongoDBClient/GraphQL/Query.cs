@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using GraphQL;
@@ -12,13 +11,12 @@ namespace MongoDBClient.GraphQL {
     //
     [GraphQLMetadata("notes")]
     public IEnumerable<NoteProject> GetNotes() {
-      ProjectResolver pr = new ProjectResolver();
       List<Note> notas = new List<Note>();
       List<NoteProject> notes = new List<NoteProject>();
       using (DBHpr db = new DBHpr()) {
         notas = db.ObtemNotas();
         foreach (Note note in notas) {
-          Project project = pr.GetProject(note, db);
+          Project project = db.ObtemProjeto(note);
           notes.Add(new NoteProject {
             Body = note.Body,
             UpdatedOn = note.UpdatedOn,
@@ -47,14 +45,5 @@ namespace MongoDBClient.GraphQL {
     public List<Dummy> GetDummies() {
       return DBDummy.ObtemDummies();
     }
-  }
-
-  //
-  public class NoteProject {
-    public string Body { get; set; }
-    public DateTime UpdatedOn { get; set; }
-    public DateTime CreatedOn { get; set; }
-    public Project project { get; set; }
-    public List<Dummy> dummies { get; set; }
   }
 }

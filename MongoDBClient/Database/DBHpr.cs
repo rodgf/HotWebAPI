@@ -71,6 +71,12 @@ namespace MongoDBClient.Database {
     }
 
     //
+    public Project ObtemProjeto(Note nota) =>
+      ObtemProjetos()
+        .Where(_ => _.matricula == nota.UserId)
+        .FirstOrDefault();
+
+    //
     public List<Project> ObtemProjetos() {
       string[] query = {
                 @"{

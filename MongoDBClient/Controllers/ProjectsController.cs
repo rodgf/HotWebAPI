@@ -13,7 +13,7 @@ namespace MongoDBClient.Controllers {
     // GET api/values
     [HttpGet]
     public async Task<ActionResult> Get() {
-      string query = @"{
+      string stQuery = @"{
         notes {
           body,
           updatedOn,
@@ -38,10 +38,10 @@ namespace MongoDBClient.Controllers {
           }
         }
       }";
-      NoteSchema schema = new NoteSchema();
+      ProjectSchema schema = new ProjectSchema();
       ExecutionResult result = await new DocumentExecuter().ExecuteAsync(_ => {
         _.Schema = schema.GraphQLSchema;
-        _.Query = query;
+        _.Query = stQuery;
       });
 
       if (result.Errors?.Count > 0) {

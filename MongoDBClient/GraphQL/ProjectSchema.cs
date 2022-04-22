@@ -3,7 +3,7 @@
 using GraphQL.Types;
 
 namespace MongoDBClient.GraphQL {
-  public class NoteSchema {
+  public class ProjectSchema {
     private ISchema _schema { get; set; }
 
     //
@@ -13,7 +13,7 @@ namespace MongoDBClient.GraphQL {
       }
     }
 
-    public NoteSchema() {
+    public ProjectSchema() {
       this._schema = Schema.For(@"
             type Note {
               body: String,
