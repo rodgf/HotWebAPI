@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace MongoDBClient.Database {
 
-  //
+  // Dados "hardcoded" para combinação com consulta de BD
   public class DBDummy {
 
     //

@@ -5,7 +5,7 @@ using MongoDBClient.GraphQL;
 
 namespace MongoDBClient.Controllers {
 
-  //
+  // Obtém dados de consulta por Schema GraphQL
   [Route("[controller]")]
   [ApiController]
   public class ProjectsController : ControllerBase {
@@ -38,6 +38,7 @@ namespace MongoDBClient.Controllers {
           }
         }
       }";
+
       ProjectSchema schema = new ProjectSchema();
       ExecutionResult result = await new DocumentExecuter().ExecuteAsync(_ => {
         _.Schema = schema.GraphQLSchema;

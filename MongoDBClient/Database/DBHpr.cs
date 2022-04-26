@@ -9,12 +9,12 @@ namespace MongoDBClient.Database {
 
   //
   public class DBHpr : IDisposable {
-    private readonly MongoClient _client;
-    private readonly MongoClient _clientAlt;
-    private readonly IMongoDatabase _db;
-    private readonly IMongoDatabase _dbAlt;
+    private MongoClient _client;
+    private MongoClient _clientAlt;
+    private IMongoDatabase _db;
+    private IMongoDatabase _dbAlt;
 
-    //
+    // Instancia clientes
     public DBHpr() {
       _client = new MongoClient(CSHelper.ConfigurationManager.AppSetting["ConnectionStrings:MongoLocal"]);
       _clientAlt = new MongoClient(CSHelper.ConfigurationManager.AppSetting["ConnectionStrings:MongoAlt"]);
@@ -22,7 +22,7 @@ namespace MongoDBClient.Database {
       _dbAlt = _clientAlt.GetDatabase("NotesDb");
     }
 
-    //
+    // Insere registro
     public void NovaNota(Note nota) {
       IMongoCollection<Note> cNote = _dbAlt.GetCollection<Note>("Note");
       cNote.InsertOne(nota);
@@ -31,32 +31,40 @@ namespace MongoDBClient.Database {
     //
     public Note ObtemNota(int userId) {
       IMongoCollection<Note> cNote = _dbAlt.GetCollection<Note>("Note");
-      Note nota = cNote.Find(_ => _.UserId == userId).FirstOrDefault();
+      Note nota = cNote
+                    .Find(_ => _.UserId == userId)
+                    .FirstOrDefault();
       return nota;
     }
 
     //
     public List<Note> ObtemNotas(int userId = 0) {
       IMongoCollection<Note> cNote = _dbAlt.GetCollection<Note>("Note");
-      List<Note> notas = cNote.Find(_ => userId == 0 || _.UserId == userId).ToList();
+      List<Note> notas = cNote
+                          .Find(_ => userId == 0 || _.UserId == userId)
+                          .ToList();
       return notas;
     }
 
     //
     public Aluno ObtemAluno(int userId = 0) {
       IMongoCollection<Aluno> cAluno = _db.GetCollection<Aluno>("aluno");
-      Aluno aluno = cAluno.Find(_ => userId == 0 || _.matricula == userId).FirstOrDefault();
+      Aluno aluno = cAluno
+                      .Find(_ => userId == 0 || _.matricula == userId)
+                      .FirstOrDefault();
       return aluno;
     }
 
     //
     public List<Aluno> ObtemAlunos(string turma = null) {
       IMongoCollection<Aluno> cAluno = _db.GetCollection<Aluno>("aluno");
-      List<Aluno> alunos = cAluno.Find(_ => turma == null || _.turma == turma).ToList();
+      List<Aluno> alunos = cAluno
+                            .Find(_ => turma == null || _.turma == turma)
+                            .ToList();
       return alunos;
     }
 
-    //
+    // Desmembra string JSON, compõe subqueries e traz resultado da consulta
     public List<Project> ObtemAlunosExt(string[] query) {
       IMongoCollection<Aluno> cAluno = _db.GetCollection<Aluno>("aluno");
 
@@ -76,7 +84,7 @@ namespace MongoDBClient.Database {
         .Where(_ => _.matricula == nota.UserId)
         .FirstOrDefault();
 
-    //
+    // Lista projetos usando MongoDB Agregate composto
     public List<Project> ObtemProjetos() {
       string[] query = {
                 @"{
@@ -123,7 +131,11 @@ namespace MongoDBClient.Database {
     }
 
     void IDisposable.Dispose() {
-      
+      _db = null;
+      _dbAlt = null;
+      _client = null;
+      _clientAlt = null;
+      GC.SuppressFinalize(this);
     }
   }
 }

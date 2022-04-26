@@ -4,7 +4,7 @@ using MongoDBClient.Database;
 
 namespace MongoDBClient.Controllers {
 
-  //
+  // Dados de consulta simples
   [Route("[controller]")]
   [ApiController]
   public class NotesController : ControllerBase {

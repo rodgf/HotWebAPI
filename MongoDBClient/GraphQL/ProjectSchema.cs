@@ -3,6 +3,8 @@
 using GraphQL.Types;
 
 namespace MongoDBClient.GraphQL {
+
+  // Para uso na API REST
   public class ProjectSchema {
     private ISchema _schema { get; set; }
 
@@ -13,6 +15,7 @@ namespace MongoDBClient.GraphQL {
       }
     }
 
+    // Combina Project e Note em lista
     public ProjectSchema() {
       this._schema = Schema.For(@"
             type Note {

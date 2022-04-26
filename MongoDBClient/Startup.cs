@@ -22,6 +22,7 @@ namespace MongoDBClient {
       services.AddMvc();
       services.AddControllers(options => options.EnableEndpointRouting = false);
 
+      // Cliente MongoDB
       services.AddTransient<DBHpr>();
 
       // GraphQL
@@ -48,11 +49,13 @@ namespace MongoDBClient {
       app.UseRouting();
       app.UseStatusCodePages();
 
+      // APIs
       app.UseEndpoints(endpoints => {
         endpoints.MapControllers();
         endpoints.MapGraphQL("/api/graphql");
       });
 
+      // Razor pages
       app.UseMvc(routes => {
         routes.MapRoute(
             name: "default",
