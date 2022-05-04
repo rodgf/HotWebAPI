@@ -7,15 +7,15 @@ namespace MongoDBClient.Database {
 
     //
     public static List<Dummy> ObtemDummies() {
-      List<Dummy> dummies = new List<Dummy>();
-      dummies.Add(new Dummy() {
-        ID = 1,
-        Name = "Robério Souza"
-      });
-      dummies.Add(new Dummy() {
-        ID = 2,
-        Name = "Marta Rocha"
-      });
+      List<Dummy> dummies = new List<Dummy> {
+        new Dummy() {
+          ID = 1,
+          Name = "Robério Souza"
+        },
+        new Dummy() {
+          ID = 2,
+          Name = "Marta Rocha"
+        }};
 
       return dummies;
     }

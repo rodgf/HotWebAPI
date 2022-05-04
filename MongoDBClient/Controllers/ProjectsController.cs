@@ -46,7 +46,7 @@ namespace MongoDBClient.Controllers {
       });
 
       if (result.Errors?.Count > 0) {
-        return BadRequest();
+        return BadRequest("Falha ao obter projetos: " + result.Errors[0].Message);
       }
 
       return Ok(result.Data);
